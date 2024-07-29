@@ -12,12 +12,12 @@ const (
 	port     = 5432
 	user     = "postgres"
 	password = "1234"
-	dbName   = "coursesdb"
+	database = "coursesdb"
 )
 
 func ConnectionDB() *gorm.DB {
 
-	dbDetails := fmt.Sprintf("host = %s port = %d user = %s password = %s dbName = %s ", host, port, user, password, dbName)
+	dbDetails := fmt.Sprintf("host = %s port = %d user = %s password = %s database = %s ", host, port, user, password, database)
 	db, err := gorm.Open(postgres.Open(dbDetails), &gorm.Config{})
 	if err != nil {
 		fmt.Println("Error Connecting to Database")
