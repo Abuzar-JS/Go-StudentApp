@@ -1,27 +1,41 @@
 package main
 
 import (
-	"student_app/config"
-	"student_app/controller"
-	"student_app/models"
-	"student_app/router"
+	"data/config"
+	"data/controller"
+	"data/helper"
+	"data/model"
+	"data/repository"
+	"data/router"
+	"data/service"
+	"net/http"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/go-playground/validator/v10"
 	"github.com/rs/zerolog/log"
 )
 
 func main() {
-	log.Info().Msg("Server Started")
+	log.Info().Msg("Started Server! ")
 
-	db := config.ConnectionDB()
+	db := config.DatabaseConnection()
+	validate := validator.New()
 
-	db.Table("school").AutoMigrate(&models.School{})
+	db.Table("school").AutoMigrate(&model.School{})
 
-	app := fiber.New()
-	schoolRepo := &controller.SchoolRepository{Db: db}
+	schoolRepository := repository.NewSchoolRepositoryImpl(db)
 
-	routes := router.SchoolRoutes{Routes: schoolRepo}
-	routes.SetupRoutes(app)
+	schoolService := service.NewSchoolServiceImpl(schoolRepository, validate)
 
-	log.Fatal().Err(app.Listen(":8080")).Msg("Server could not start")
+	schoolController := controller.NewSchoolController(schoolService)
+
+	routes := router.NewRouter(schoolController)
+
+	server := &http.Server{
+		Addr:    ":8080",
+		Handler: routes,
+	}
+
+	err := server.ListenAndServe()
+	helper.ReturnError(err)
+
 }

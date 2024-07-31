@@ -1,21 +1,28 @@
 package router
 
 import (
-	"student_app/controller"
+	"data/controller"
+	"net/http"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gin-gonic/gin"
 )
 
-type SchoolRoutes struct {
-	Routes *controller.SchoolRepository
-}
+func NewRouter(schoolController *controller.SchoolController) *gin.Engine {
 
-func (r *SchoolRoutes) SetupRoutes(app *fiber.App) {
+	router := gin.Default()
 
-	api := app.Group("/api")
-	api.Post("/create_school", r.Routes.CreateSchool)
-	api.Delete("/delete_school/:id", r.Routes.DeleteSchool)
-	api.Get("/get_school/:id", r.Routes.GetSchoolByID)
-	api.Get("/schools", r.Routes.GetSchool)
+	router.GET("", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, "Welcome to School")
+	})
 
+	baseRouter := router.Group("/api")
+	schoolRouter := baseRouter.Group("/school")
+	schoolRouter.GET("", schoolController.FindByAll)
+	schoolRouter.GET("/:schoolId", schoolController.FindById)
+	schoolRouter.POST("", schoolController.Create)
+	schoolRouter.PATCH("/:schoolId", schoolController.Update)
+	schoolRouter.PUT("/:schoolId", schoolController.Update)
+	schoolRouter.DELETE("/:schoolId", schoolController.Delete)
+
+	return router
 }
