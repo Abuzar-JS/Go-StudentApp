@@ -1,10 +1,10 @@
 package controller
 
 import (
-	"data/controller/request"
-	"data/controller/response"
 	"data/helper"
-	"data/service"
+	"data/school/controller/request"
+	"data/school/controller/response"
+	"data/school/service"
 	"net/http"
 	"strconv"
 

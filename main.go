@@ -2,12 +2,13 @@ package main
 
 import (
 	"data/config"
-	"data/controller"
 	"data/helper"
-	"data/model"
-	"data/repository"
 	"data/router"
-	"data/service"
+	"data/school/controller"
+	"data/school/model"
+	"data/school/repository"
+	"data/school/service"
+
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
@@ -20,7 +21,7 @@ func main() {
 	db := config.DatabaseConnection()
 	validate := validator.New()
 
-	db.Table("school").AutoMigrate(&model.School{})
+	db.AutoMigrate(&model.School{})
 
 	schoolRepository := repository.NewSchoolRepositoryImpl(db)
 

@@ -1,9 +1,9 @@
 package service
 
 import (
-	"data/controller/request"
-	"data/controller/response"
-	"data/model"
+	"data/school/controller/request"
+	"data/school/controller/response"
+	"data/school/model"
 )
 
 type SchoolService interface {

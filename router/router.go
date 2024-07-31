@@ -1,7 +1,7 @@
 package router
 
 import (
-	"data/controller"
+	"data/school/controller"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,14 +15,14 @@ func NewRouter(schoolController *controller.SchoolController) *gin.Engine {
 		ctx.JSON(http.StatusOK, "Welcome to School")
 	})
 
-	baseRouter := router.Group("/api")
-	schoolRouter := baseRouter.Group("/school")
-	schoolRouter.GET("", schoolController.FindByAll)
-	schoolRouter.GET("/:schoolId", schoolController.FindById)
+	schoolRouter := router.Group("/api/v1")
+
+	schoolRouter.GET("schools", schoolController.FindByAll)
+	schoolRouter.GET("school/:school_id", schoolController.FindById)
 	schoolRouter.POST("", schoolController.Create)
-	schoolRouter.PATCH("/:schoolId", schoolController.Update)
-	schoolRouter.PUT("/:schoolId", schoolController.Update)
-	schoolRouter.DELETE("/:schoolId", schoolController.Delete)
+	schoolRouter.PATCH("/:school_id", schoolController.Update)
+	schoolRouter.PUT("/:school_id", schoolController.Update)
+	schoolRouter.DELETE("/:school_id", schoolController.Delete)
 
 	return router
 }

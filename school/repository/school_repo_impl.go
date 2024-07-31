@@ -1,6 +1,8 @@
 package repository
 
-import "data/model"
+import (
+	"data/school/model"
+)
 
 type SchoolRepository interface {
 	Save(school *model.School)

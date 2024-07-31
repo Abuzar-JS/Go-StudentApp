@@ -1,11 +1,11 @@
 package service
 
 import (
-	"data/controller/request"
-	"data/controller/response"
 	"data/helper"
-	"data/model"
-	"data/repository"
+	"data/school/controller/request"
+	"data/school/controller/response"
+	"data/school/model"
+	"data/school/repository"
 
 	"github.com/go-playground/validator/v10"
 )

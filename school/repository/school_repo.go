@@ -1,9 +1,9 @@
 package repository
 
 import (
-	"data/controller/request"
 	"data/helper"
-	"data/model"
+	"data/school/controller/request"
+	"data/school/model"
 	"errors"
 	"fmt"
 
