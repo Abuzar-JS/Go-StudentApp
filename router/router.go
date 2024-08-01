@@ -22,7 +22,7 @@ func NewRouter(schoolController *controller.SchoolController) *gin.Engine {
 	schoolRouter.POST("", schoolController.Create)
 	schoolRouter.PATCH("/:school_id", schoolController.Update)
 	schoolRouter.PUT("/:school_id", schoolController.Update)
-	schoolRouter.DELETE("/:school_id", schoolController.Delete)
+	schoolRouter.DELETE("school/delete/:school_id", schoolController.Delete)
 
 	return router
 }

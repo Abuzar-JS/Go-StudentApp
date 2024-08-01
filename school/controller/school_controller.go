@@ -5,7 +5,6 @@ import (
 	"data/school/controller/request"
 	"data/school/controller/response"
 	"data/school/service"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -74,7 +73,7 @@ func (controller *SchoolController) Update(ctx *gin.Context) {
 // Delete Controller
 func (controller *SchoolController) Delete(ctx *gin.Context) {
 
-	schoolId := ctx.Param("schoolId")
+	schoolId := ctx.Param("school_id")
 	id, err := strconv.Atoi(schoolId)
 	helper.ReturnError(err)
 	controller.SchoolService.Delete(id)
@@ -91,14 +90,12 @@ func (controller *SchoolController) Delete(ctx *gin.Context) {
 
 // FindById Controller
 func (controller *SchoolController) FindById(ctx *gin.Context) {
-	fmt.Println("helooooooo1")
 
-	schoolId := ctx.Param("schoolId")
+	schoolId := ctx.Param("school_id")
 	id, err := strconv.Atoi(schoolId)
 	helper.ReturnError(err)
 
 	schoolResponse := controller.SchoolService.FindById(id)
-	fmt.Println("helooooooo2", schoolResponse)
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
