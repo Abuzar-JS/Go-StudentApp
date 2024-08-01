@@ -5,7 +5,6 @@ import (
 	"data/school/controller/request"
 	"data/school/model"
 	"errors"
-	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -43,10 +42,12 @@ func (u *SchoolRepositoryImpl) FindById(schoolId int) (School model.School, err 
 	}
 }
 
-func (u *SchoolRepositoryImpl) Save(school *model.School) {
-	result := u.Db.Create(&school)
-	fmt.Println(result.Error)
-	helper.ReturnError(result.Error)
+func (u *SchoolRepositoryImpl) Save(school *model.School) error {
+	result := u.Db.Create(school)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }
 
 func (u *SchoolRepositoryImpl) Update(school model.School) {

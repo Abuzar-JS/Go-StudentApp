@@ -5,6 +5,7 @@ import (
 	"data/school/controller/request"
 	"data/school/controller/response"
 	"data/school/service"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -26,22 +27,24 @@ func NewSchoolController(service service.SchoolService) *SchoolController {
 // Create Controller
 func (controller *SchoolController) Create(ctx *gin.Context) {
 	createSchoolRequest := request.CreateSchoolRequest{}
-	err := ctx.ShouldBindJSON(&createSchoolRequest)
-	helper.ReturnError(err)
-
-	newSchool := controller.SchoolService.Create(createSchoolRequest)
-
-	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data: gin.H{
-			"id":   newSchool.Id,
-			"Name": newSchool.Name,
-		},
+	if err := ctx.ShouldBindJSON(&createSchoolRequest); err != nil {
+		ctx.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
 	}
-	ctx.Header("Content-Type", "application/json")
 
-	ctx.JSON(http.StatusOK, webResponse)
+	school, err := controller.SchoolService.Create(createSchoolRequest)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"message": err,
+		})
+		return
+	}
+	ctx.JSON(200, gin.H{
+		"message": "School created successfully",
+		"school":  school,
+	})
 
 }
 
@@ -88,11 +91,14 @@ func (controller *SchoolController) Delete(ctx *gin.Context) {
 
 // FindById Controller
 func (controller *SchoolController) FindById(ctx *gin.Context) {
+	fmt.Println("helooooooo1")
+
 	schoolId := ctx.Param("schoolId")
 	id, err := strconv.Atoi(schoolId)
 	helper.ReturnError(err)
 
 	schoolResponse := controller.SchoolService.FindById(id)
+	fmt.Println("helooooooo2", schoolResponse)
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,

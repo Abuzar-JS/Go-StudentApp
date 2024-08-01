@@ -5,7 +5,7 @@ import (
 )
 
 type SchoolRepository interface {
-	Save(school *model.School)
+	Save(school *model.School) error
 	Update(school model.School)
 	Delete(schoolId int)
 	FindById(schoolId int) (School model.School, err error)

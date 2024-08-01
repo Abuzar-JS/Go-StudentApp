@@ -6,6 +6,7 @@ import (
 	"data/school/controller/response"
 	"data/school/model"
 	"data/school/repository"
+	"fmt"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -19,16 +20,22 @@ func NewSchoolServiceImpl(schoolRepository repository.SchoolRepository, validate
 	return &SchoolServiceImpl{SchoolRepository: schoolRepository, validate: validate}
 }
 
-func (u *SchoolServiceImpl) Create(school request.CreateSchoolRequest) model.School {
+func (u *SchoolServiceImpl) Create(school request.CreateSchoolRequest) (model.School, error) {
 	err := u.validate.Struct(school)
-	helper.ReturnError(err)
+	if err != nil {
+		return model.School{}, err
+	}
+
 	schoolModel := model.School{
 		Name: school.Name,
 	}
 
-	u.SchoolRepository.Save(&schoolModel)
+	err = u.SchoolRepository.Save(&schoolModel)
+	if err != nil {
+		return model.School{}, err
+	}
 
-	return schoolModel
+	return schoolModel, nil
 
 }
 
@@ -38,6 +45,8 @@ func (u *SchoolServiceImpl) Delete(SchoolId int) {
 
 // find all the Schools in DB
 func (u *SchoolServiceImpl) FindAll() []response.SchoolResponse {
+	fmt.Println("helooooooo333")
+
 	result := u.SchoolRepository.FindAll()
 
 	var schools []response.SchoolResponse
