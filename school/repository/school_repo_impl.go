@@ -4,7 +4,6 @@ import (
 	"data/helper"
 	"data/school/controller/request"
 	"data/school/model"
-	"errors"
 	"fmt"
 
 	"gorm.io/gorm"
@@ -44,12 +43,11 @@ func (u *SchoolRepositoryImpl) FindAll() []model.School {
 
 func (u *SchoolRepositoryImpl) FindById(schoolId int) (School model.School, err error) {
 	var school model.School
-	result := u.Db.Find(&school, schoolId)
-	if result != nil {
-		return school, nil
-	} else {
-		return school, errors.New("school not found")
+	result := u.Db.First(&school, schoolId)
+	if result.Error != nil {
+		return school, fmt.Errorf("school not found")
 	}
+	return school, nil
 }
 
 func (u *SchoolRepositoryImpl) Save(school *model.School) error {

@@ -40,12 +40,17 @@ func (u *SchoolServiceImpl) Create(school request.CreateSchoolRequest) (model.Sc
 }
 
 func (u *SchoolServiceImpl) Delete(schoolId int) error {
-	return u.SchoolRepository.Delete(schoolId)
+	err := u.SchoolRepository.Delete(schoolId)
+
+	if err != nil {
+		return fmt.Errorf("id Does not Exist")
+
+	}
+	return nil
 }
 
 // find all the Schools in DB
 func (u *SchoolServiceImpl) FindAll() []response.SchoolResponse {
-	fmt.Println("helooooooo333")
 
 	result := u.SchoolRepository.FindAll()
 
@@ -61,14 +66,16 @@ func (u *SchoolServiceImpl) FindAll() []response.SchoolResponse {
 	return schools
 }
 
-func (u *SchoolServiceImpl) FindById(schoolId int) response.SchoolResponse {
+func (u *SchoolServiceImpl) FindById(schoolId int) (response.SchoolResponse, error) {
 	School, err := u.SchoolRepository.FindById(schoolId)
-	helper.ReturnError(err)
+	if err != nil {
+		return response.SchoolResponse{}, fmt.Errorf("service: school not found ")
+	}
 	schoolResponse := response.SchoolResponse{
 		Id:   School.Id,
 		Name: School.Name,
 	}
-	return schoolResponse
+	return schoolResponse, nil
 }
 
 func (u *SchoolServiceImpl) Update(school request.UpdateSchoolRequest) {

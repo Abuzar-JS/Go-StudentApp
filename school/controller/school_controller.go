@@ -54,7 +54,7 @@ func (controller *SchoolController) Update(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&updateSchoolRequest)
 	helper.ReturnError(err)
 
-	schoolId := ctx.Param("schoolId")
+	schoolId := ctx.Param("school_id")
 	id, err := strconv.Atoi(schoolId)
 	helper.ReturnError(err)
 	updateSchoolRequest.Id = id
@@ -75,7 +75,7 @@ func (controller *SchoolController) Delete(ctx *gin.Context) {
 	schoolId := ctx.Param("school_id")
 	id, err := strconv.Atoi(schoolId)
 	if err != nil {
-		ctx.JSON(404, gin.H{
+		ctx.JSON(400, gin.H{
 			"message": err.Error(),
 		})
 		return
@@ -99,17 +99,25 @@ func (controller *SchoolController) FindById(ctx *gin.Context) {
 
 	schoolId := ctx.Param("school_id")
 	id, err := strconv.Atoi(schoolId)
-	helper.ReturnError(err)
-
-	schoolResponse := controller.SchoolService.FindById(id)
-
-	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   schoolResponse,
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
 	}
-	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, webResponse)
+
+	school, err := controller.SchoolService.FindById(id)
+	if err != nil {
+		ctx.JSON(404, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(200, gin.H{
+		"message": "school found",
+		"data":    school,
+	})
 }
 
 // FindByAll Controller

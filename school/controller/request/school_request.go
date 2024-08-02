@@ -5,6 +5,6 @@ type CreateSchoolRequest struct {
 }
 
 type UpdateSchoolRequest struct {
-	Id   int    `validate:"required"`
+	Id   int    `validate:"required" json:"id"`
 	Name string `validate:"required,max = 200, min =1" json:"name"`
 }
