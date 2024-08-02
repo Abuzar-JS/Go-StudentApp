@@ -58,12 +58,15 @@ func (u *SchoolRepositoryImpl) Save(school *model.School) error {
 	return nil
 }
 
-func (u *SchoolRepositoryImpl) Update(school model.School) {
+func (u *SchoolRepositoryImpl) Update(school model.School) error {
 	var updateSchool = request.UpdateSchoolRequest{
 		Id:   school.Id,
 		Name: school.Name,
 	}
 
 	result := u.Db.Model(&school).Updates(updateSchool)
-	helper.ReturnError(result.Error)
+	if result.Error != nil {
+		return fmt.Errorf("can't update")
+	}
+	return nil
 }

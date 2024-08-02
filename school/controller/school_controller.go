@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"data/helper"
 	"data/school/controller/request"
 	"data/school/controller/response"
 	"data/school/service"
@@ -52,23 +51,28 @@ func (controller *SchoolController) Create(ctx *gin.Context) {
 func (controller *SchoolController) Update(ctx *gin.Context) {
 	updateSchoolRequest := request.UpdateSchoolRequest{}
 	err := ctx.ShouldBindJSON(&updateSchoolRequest)
-	helper.ReturnError(err)
 
 	schoolId := ctx.Param("school_id")
 	id, err := strconv.Atoi(schoolId)
-	helper.ReturnError(err)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
 	updateSchoolRequest.Id = id
 
-	controller.SchoolService.Update(updateSchoolRequest)
-
-	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   updateSchoolRequest,
+	err = controller.SchoolService.Update(updateSchoolRequest)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
 	}
-	ctx.Header("Content-Type", "application/json")
 
-	ctx.JSON(http.StatusOK, webResponse)
+	ctx.JSON(200, gin.H{
+		"message": "School updated successfully",
+	})
 }
 
 func (controller *SchoolController) Delete(ctx *gin.Context) {

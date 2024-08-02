@@ -1,7 +1,6 @@
 package service
 
 import (
-	"data/helper"
 	"data/school/controller/request"
 	"data/school/controller/response"
 	"data/school/model"
@@ -78,9 +77,12 @@ func (u *SchoolServiceImpl) FindById(schoolId int) (response.SchoolResponse, err
 	return schoolResponse, nil
 }
 
-func (u *SchoolServiceImpl) Update(school request.UpdateSchoolRequest) {
+func (u *SchoolServiceImpl) Update(school request.UpdateSchoolRequest) error {
 	schoolData, err := u.SchoolRepository.FindById(school.Id)
-	helper.ReturnError(err)
+	if err != nil {
+		return fmt.Errorf("service: can't update ")
+	}
 	schoolData.Name = school.Name
 	u.SchoolRepository.Update(schoolData)
+	return nil
 }

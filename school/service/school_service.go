@@ -8,7 +8,7 @@ import (
 
 type SchoolService interface {
 	Create(school request.CreateSchoolRequest) (model.School, error)
-	Update(school request.UpdateSchoolRequest)
+	Update(school request.UpdateSchoolRequest) error
 	Delete(schoolId int) error
 	FindById(schoolId int) (response.SchoolResponse, error)
 	FindAll() []response.SchoolResponse
