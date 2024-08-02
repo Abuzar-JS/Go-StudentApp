@@ -32,15 +32,15 @@ func (u *SchoolServiceImpl) Create(school request.CreateSchoolRequest) (model.Sc
 
 	err = u.SchoolRepository.Save(&schoolModel)
 	if err != nil {
-		return model.School{}, err
+		return model.School{}, fmt.Errorf("school creation failed")
 	}
 
 	return schoolModel, nil
 
 }
 
-func (u *SchoolServiceImpl) Delete(SchoolId int) {
-	u.SchoolRepository.Delete(SchoolId)
+func (u *SchoolServiceImpl) Delete(schoolId int) error {
+	return u.SchoolRepository.Delete(schoolId)
 }
 
 // find all the Schools in DB

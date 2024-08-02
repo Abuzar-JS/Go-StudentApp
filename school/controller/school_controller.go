@@ -34,9 +34,10 @@ func (controller *SchoolController) Create(ctx *gin.Context) {
 	}
 
 	school, err := controller.SchoolService.Create(createSchoolRequest)
+
 	if err != nil {
 		ctx.JSON(400, gin.H{
-			"message": err,
+			"message": err.Error(),
 		})
 		return
 	}
@@ -70,22 +71,27 @@ func (controller *SchoolController) Update(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, webResponse)
 }
 
-// Delete Controller
 func (controller *SchoolController) Delete(ctx *gin.Context) {
-
 	schoolId := ctx.Param("school_id")
 	id, err := strconv.Atoi(schoolId)
-	helper.ReturnError(err)
-	controller.SchoolService.Delete(id)
-
-	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   schoolId,
+	if err != nil {
+		ctx.JSON(404, gin.H{
+			"message": err.Error(),
+		})
+		return
 	}
-	ctx.Header("Content-Type", "application/json")
 
-	ctx.JSON(http.StatusOK, webResponse)
+	err = controller.SchoolService.Delete(id)
+	if err != nil {
+		ctx.JSON(404, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(200, gin.H{
+		"message": "school deleted successfully",
+	})
 }
 
 // FindById Controller

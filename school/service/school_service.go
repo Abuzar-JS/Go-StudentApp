@@ -9,7 +9,7 @@ import (
 type SchoolService interface {
 	Create(school request.CreateSchoolRequest) (model.School, error)
 	Update(school request.UpdateSchoolRequest)
-	Delete(schoolId int)
+	Delete(schoolId int) error
 	FindById(schoolId int) response.SchoolResponse
 	FindAll() []response.SchoolResponse
 }
