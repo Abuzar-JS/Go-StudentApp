@@ -1,6 +1,6 @@
 package repository
 
-import "data/students/model"
+import "data/student/model"
 
 type StudentRepository interface {
 	Save(student *model.Student) error

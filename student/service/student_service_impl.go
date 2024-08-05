@@ -5,7 +5,6 @@ import (
 	"data/student/controller/response"
 	"data/student/model"
 	"data/student/repository"
-	"data/students/model"
 	"fmt"
 
 	"github.com/go-playground/validator/v10"
@@ -27,7 +26,9 @@ func (u *StudentServiceImpl) Create(student request.CreateStudentRequest) (model
 	}
 
 	studentModel := model.Student{
-		Name: student.Name,
+		Name:     student.Name,
+		Class:    student.Class,
+		SchoolID: student.SchoolID,
 	}
 
 	err = u.StudentRepository.Save(&studentModel)
@@ -58,8 +59,9 @@ func (u *StudentServiceImpl) FindAll() []response.StudentResponse {
 
 	for _, value := range result {
 		Student := response.StudentResponse{
-			Id:   value.Id,
-			Name: value.Name,
+			ID:    value.ID,
+			Name:  value.Name,
+			Class: value.Class,
 		}
 		students = append(students, Student)
 	}
@@ -72,14 +74,15 @@ func (u *StudentServiceImpl) FindById(studentId int) (response.StudentResponse, 
 		return response.StudentResponse{}, fmt.Errorf("service: student not found ")
 	}
 	studentResponse := response.StudentResponse{
-		Id:   Student.Id,
-		Name: Student.Name,
+		ID:    Student.ID,
+		Name:  Student.Name,
+		Class: Student.Class,
 	}
 	return studentResponse, nil
 }
 
 func (u *StudentServiceImpl) Update(student request.UpdateStudentRequest) error {
-	studentData, err := u.StudentRepository.FindById(student.Id)
+	studentData, err := u.StudentRepository.FindById(student.ID)
 	if err != nil {
 		return fmt.Errorf("service: can't update ")
 	}

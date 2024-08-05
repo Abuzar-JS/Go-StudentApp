@@ -2,8 +2,8 @@ package repository
 
 import (
 	"data/helper"
-	"data/students/controller/request"
-	"data/students/model"
+	"data/student/controller/request"
+	"data/student/model"
 	"fmt"
 
 	"gorm.io/gorm"
@@ -60,8 +60,9 @@ func (u *StudentRepositoryImpl) Save(student *model.Student) error {
 
 func (u *StudentRepositoryImpl) Update(student model.Student) error {
 	var updateStudent = request.UpdateStudentRequest{
-		Id:   student.Id,
-		Name: student.Name,
+		Name:     student.Name,
+		Class:    student.Class,
+		SchoolID: student.SchoolID,
 	}
 
 	result := u.Db.Model(&student).Updates(updateStudent)

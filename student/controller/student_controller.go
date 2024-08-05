@@ -1,12 +1,13 @@
 package controller
 
 import (
-	"data/students/controller/request"
-	"data/students/controller/response"
-	"data/students/service"
-	"github.com/gin-gonic/gin"
+	"data/student/controller/request"
+	"data/student/controller/response"
+	"data/student/service"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 // StudentController struct
@@ -59,7 +60,7 @@ func (controller *StudentController) Update(ctx *gin.Context) {
 		})
 		return
 	}
-	updateStudentRequest.Id = id
+	updateStudentRequest.ID = id
 
 	err = controller.StudentService.Update(updateStudentRequest)
 	if err != nil {

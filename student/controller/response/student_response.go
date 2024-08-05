@@ -1,8 +1,9 @@
 package response
 
 type StudentResponse struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	Class string `json:"class"`
 }
 
 type Response struct {

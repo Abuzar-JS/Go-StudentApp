@@ -3,11 +3,7 @@ package main
 import (
 	"data/config"
 	"data/helper"
-	"data/router"
-	"data/school/controller"
-	"data/school/model"
-	"data/school/repository"
-	"data/school/service"
+	"data/student/controller/router"
 
 	"net/http"
 
@@ -21,15 +17,7 @@ func main() {
 	db := config.DatabaseConnection()
 	validate := validator.New()
 
-	db.AutoMigrate(&model.School{})
-
-	schoolRepository := repository.NewSchoolRepositoryImpl(db)
-
-	schoolService := service.NewSchoolServiceImpl(schoolRepository, validate)
-
-	schoolController := controller.NewSchoolController(schoolService)
-
-	routes := router.NewRouter(schoolController)
+	routes := router.StudentRouter(db, validate)
 
 	server := &http.Server{
 		Addr:    ":8080",

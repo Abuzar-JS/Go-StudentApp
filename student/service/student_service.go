@@ -3,7 +3,7 @@ package service
 import (
 	"data/student/controller/request"
 	"data/student/controller/response"
-	"students/model"
+	"data/student/model"
 )
 
 type StudentService interface {
