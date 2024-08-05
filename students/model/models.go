@@ -6,7 +6,7 @@ type Student struct {
 	Id     int            `gorm:"primaryKey;unique;not null" json:"id"`
 	Name   string         `gorm:"not null" json:"name"`
 	Class  string         `gorm:"not null" json:"class"`
-	School []model.School `gorm:"not null" json:"school"`
+	School []model.School `gorm:"-" json:"school"`
 }
 
 func (s Student) TableName() string {
