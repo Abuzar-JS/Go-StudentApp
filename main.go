@@ -3,10 +3,12 @@ package main
 import (
 	"data/config"
 	"data/helper"
-	"data/student/controller/router"
+	schoolRouter "data/school/controller/router"
+	studentRouter "data/student/controller/router"
 
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/rs/zerolog/log"
 )
@@ -17,11 +19,14 @@ func main() {
 	db := config.DatabaseConnection()
 	validate := validator.New()
 
-	routes := router.StudentRouter(db, validate)
+	ginRouter := gin.Default()
+
+	schoolRouter.SchoolRouter(ginRouter, db, validate)
+	studentRouter.StudentRouter(ginRouter, db, validate)
 
 	server := &http.Server{
 		Addr:    ":8080",
-		Handler: routes,
+		Handler: ginRouter,
 	}
 
 	err := server.ListenAndServe()

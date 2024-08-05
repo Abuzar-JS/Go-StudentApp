@@ -4,21 +4,13 @@ import (
 	"data/school/controller"
 	"data/school/repository"
 	"data/school/service"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"
 )
 
-func SchoolRouter(db *gorm.DB, validate *validator.Validate) *gin.Engine {
-
-	router := gin.Default()
-
-	router.GET("", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, "Welcome to School")
-	})
-
+func SchoolRouter(router *gin.Engine, db *gorm.DB, validate *validator.Validate) *gin.Engine {
 	schoolRepository := repository.NewSchoolRepositoryImpl(db)
 
 	schoolService := service.NewSchoolServiceImpl(schoolRepository, validate)
@@ -27,12 +19,12 @@ func SchoolRouter(db *gorm.DB, validate *validator.Validate) *gin.Engine {
 
 	schoolRouter := router.Group("/api/v1")
 
-	schoolRouter.GET("schools", schoolController.FindByAll)
-	schoolRouter.GET("school/:school_id", schoolController.FindById)
-	schoolRouter.POST("", schoolController.Create)
-	schoolRouter.PATCH("/:school_id", schoolController.Update)
-	schoolRouter.PUT("/:school_id", schoolController.Update)
-	schoolRouter.DELETE("school/delete/:school_id", schoolController.Delete)
+	schoolRouter.GET("/schools", schoolController.FindByAll)
+	schoolRouter.GET("/schools/:school_id", schoolController.FindById)
+	schoolRouter.POST("/school", schoolController.Create)
+	schoolRouter.PATCH("/schools/:school_id", schoolController.Update)
+	schoolRouter.PUT("/schools/:school_id", schoolController.Update)
+	schoolRouter.DELETE("/schools/:school_id", schoolController.Delete)
 
 	return router
 }
