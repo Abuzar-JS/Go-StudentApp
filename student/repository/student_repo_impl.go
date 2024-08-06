@@ -57,16 +57,12 @@ func (u *StudentRepositoryImpl) Save(student *model.Student) error {
 	return nil
 }
 
-func (u *StudentRepositoryImpl) Update(student model.Student) error {
-	// var updateStudent = request.UpdateStudentRequest{
-	// 	Name:     student.Name,
-	// 	Class:    student.Class,
-	// 	SchoolID: student.SchoolID,
-	// }
+func (u *StudentRepositoryImpl) Update(id int, student model.Student) error {
 
-	result := u.Db.Model(&student).Updates(student)
+	result := u.Db.Model(model.Student{}).Where("id=?", student.ID).Updates(student)
 	if result.Error != nil {
 		return fmt.Errorf("can't update")
 	}
+
 	return nil
 }

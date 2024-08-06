@@ -87,20 +87,19 @@ func (u *StudentServiceImpl) Update(id int, student request.UpdateStudentRequest
 		return fmt.Errorf("service: can't update ")
 	}
 
-	fmt.Println(student.Name)
 	if student.Name != nil {
 		studentData.Name = *student.Name
-
 	}
 
-	fmt.Println(student.Class)
 	if student.Class != nil {
 		studentData.Class = *student.Class
 	}
-	fmt.Println(student.SchoolID)
+
 	if student.SchoolID != nil {
 		studentData.SchoolID = *student.SchoolID
 	}
-	u.StudentRepository.Update(studentData)
+	if err := u.StudentRepository.Update(id, studentData); err != nil {
+		return fmt.Errorf("update request failed: %w", err)
+	}
 	return nil
 }
