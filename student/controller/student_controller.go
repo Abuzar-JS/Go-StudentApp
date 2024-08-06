@@ -60,9 +60,14 @@ func (controller *StudentController) Update(ctx *gin.Context) {
 		})
 		return
 	}
-	updateStudentRequest.ID = id
+	if updateStudentRequest.Class == nil && updateStudentRequest.Name == nil && updateStudentRequest.SchoolID == nil {
+		ctx.JSON(400, gin.H{
+			"message": "atleast single field is required to update student",
+		})
+		return
+	}
 
-	err = controller.StudentService.Update(updateStudentRequest)
+	err = controller.StudentService.Update(id, updateStudentRequest)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"message": err.Error(),

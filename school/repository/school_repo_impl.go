@@ -36,7 +36,7 @@ func (u *SchoolRepositoryImpl) Delete(schoolId int) error {
 
 func (u *SchoolRepositoryImpl) FindAll() []model.School {
 	var School []model.School
-	result := u.Db.Find(&School)
+	result := u.Db.Order("id").Find(&School)
 	helper.ReturnError(result.Error)
 	return School
 }

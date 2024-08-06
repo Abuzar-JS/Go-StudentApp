@@ -81,12 +81,26 @@ func (u *StudentServiceImpl) FindById(studentId int) (response.StudentResponse, 
 	return studentResponse, nil
 }
 
-func (u *StudentServiceImpl) Update(student request.UpdateStudentRequest) error {
-	studentData, err := u.StudentRepository.FindById(student.ID)
+func (u *StudentServiceImpl) Update(id int, student request.UpdateStudentRequest) error {
+	studentData, err := u.StudentRepository.FindById(id)
 	if err != nil {
 		return fmt.Errorf("service: can't update ")
 	}
-	studentData.Name = student.Name
+
+	fmt.Println(student.Name)
+	if student.Name != nil {
+		studentData.Name = *student.Name
+
+	}
+
+	fmt.Println(student.Class)
+	if student.Class != nil {
+		studentData.Class = *student.Class
+	}
+	fmt.Println(student.SchoolID)
+	if student.SchoolID != nil {
+		studentData.SchoolID = *student.SchoolID
+	}
 	u.StudentRepository.Update(studentData)
 	return nil
 }

@@ -2,7 +2,6 @@ package repository
 
 import (
 	"data/helper"
-	"data/student/controller/request"
 	"data/student/model"
 	"fmt"
 
@@ -59,13 +58,13 @@ func (u *StudentRepositoryImpl) Save(student *model.Student) error {
 }
 
 func (u *StudentRepositoryImpl) Update(student model.Student) error {
-	var updateStudent = request.UpdateStudentRequest{
-		Name:     student.Name,
-		Class:    student.Class,
-		SchoolID: student.SchoolID,
-	}
+	// var updateStudent = request.UpdateStudentRequest{
+	// 	Name:     student.Name,
+	// 	Class:    student.Class,
+	// 	SchoolID: student.SchoolID,
+	// }
 
-	result := u.Db.Model(&student).Updates(updateStudent)
+	result := u.Db.Model(&student).Updates(student)
 	if result.Error != nil {
 		return fmt.Errorf("can't update")
 	}
