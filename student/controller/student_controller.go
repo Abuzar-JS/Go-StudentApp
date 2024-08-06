@@ -2,9 +2,7 @@ package controller
 
 import (
 	"data/student/controller/request"
-	"data/student/controller/response"
 	"data/student/service"
-	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -130,14 +128,26 @@ func (controller *StudentController) FindById(ctx *gin.Context) {
 }
 
 // FindByAll Controller
-func (controller *StudentController) FindByAll(ctx *gin.Context) {
-	studentResponse := controller.StudentService.FindAll()
-	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   studentResponse,
+func (controller *StudentController) FindBySchoolID(ctx *gin.Context) {
+	schoolID := ctx.Param("school_id")
+	id, err := strconv.Atoi(schoolID)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
 	}
-	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, webResponse)
+	student := controller.StudentService.FindBySchoolID(id)
+	// if err != nil {
+	// 	ctx.JSON(404, gin.H{
+	// 		"message": err.Error(),
+	// 	})
+	// 	return
+	// }
+
+	ctx.JSON(200, gin.H{
+		"message": "student found",
+		"data":    student,
+	})
 
 }

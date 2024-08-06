@@ -19,7 +19,7 @@ func StudentRouter(router *gin.Engine, db *gorm.DB, validate *validator.Validate
 
 	studentRouter := router.Group("/api/v1")
 
-	studentRouter.GET("students", studentController.FindByAll)
+	studentRouter.GET("/:school_id/students", studentController.FindBySchoolID)
 	studentRouter.GET("students/:student_id", studentController.FindById)
 	studentRouter.POST("/student", studentController.Create)
 	studentRouter.PUT("students/:student_id", studentController.Update)

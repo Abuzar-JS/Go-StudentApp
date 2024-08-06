@@ -33,9 +33,9 @@ func (u *StudentRepositoryImpl) Delete(studentId int) error {
 	return nil
 }
 
-func (u *StudentRepositoryImpl) FindAll() []model.Student {
+func (u *StudentRepositoryImpl) FindBySchoolID(studentID int) []model.Student {
 	var Student []model.Student
-	result := u.Db.Find(&Student)
+	result := u.Db.Where("school_id=?", studentID).Find(&Student)
 	helper.ReturnError(result.Error)
 	return Student
 }

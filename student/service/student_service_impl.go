@@ -51,9 +51,9 @@ func (u *StudentServiceImpl) Delete(studentId int) error {
 }
 
 // find all the Students in DB
-func (u *StudentServiceImpl) FindAll() []response.StudentResponse {
+func (u *StudentServiceImpl) FindBySchoolID(studentID int) []response.StudentResponse {
 
-	result := u.StudentRepository.FindAll()
+	result := u.StudentRepository.FindBySchoolID(studentID)
 
 	var students []response.StudentResponse
 
