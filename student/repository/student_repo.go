@@ -7,6 +7,5 @@ type StudentRepository interface {
 	Update(id int, student model.Student) error
 	Delete(studentId int) error
 	FindById(studentId int) (Student model.Student, err error)
-	// FindAll() []model.Student
 	FindBySchoolID(studentID int) []model.Student
 }

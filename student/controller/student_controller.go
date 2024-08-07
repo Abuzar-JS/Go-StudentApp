@@ -138,12 +138,6 @@ func (controller *StudentController) FindBySchoolID(ctx *gin.Context) {
 		return
 	}
 	student := controller.StudentService.FindBySchoolID(id)
-	// if err != nil {
-	// 	ctx.JSON(404, gin.H{
-	// 		"message": err.Error(),
-	// 	})
-	// 	return
-	// }
 
 	ctx.JSON(200, gin.H{
 		"message": "student found",

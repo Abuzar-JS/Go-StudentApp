@@ -26,9 +26,8 @@ func (u *CourseServiceImpl) Create(course request.CreateCourseRequest) (model.Co
 	}
 
 	courseModel := model.Course{
-		Name:     course.Name,
-		Class:    course.Class,
-		SchoolID: course.SchoolID,
+		Title:     course.Title,
+		StudentID: course.StudentID,
 	}
 
 	err = u.CourseRepository.Save(&courseModel)
@@ -51,17 +50,17 @@ func (u *CourseServiceImpl) Delete(courseId int) error {
 }
 
 // find all the Courses in DB
-func (u *CourseServiceImpl) FindAll() []response.CourseResponse {
+func (u *CourseServiceImpl) FindByStudentID(studentID int) []response.CourseResponse {
 
-	result := u.CourseRepository.FindAll()
+	result := u.CourseRepository.FindByStudentID(studentID)
 
 	var courses []response.CourseResponse
 
 	for _, value := range result {
 		Course := response.CourseResponse{
-			ID:    value.ID,
-			Name:  value.Name,
-			Class: value.Class,
+			ID:        value.ID,
+			Title:     value.Title,
+			StudentID: value.StudentID,
 		}
 		courses = append(courses, Course)
 	}
@@ -74,19 +73,28 @@ func (u *CourseServiceImpl) FindById(courseId int) (response.CourseResponse, err
 		return response.CourseResponse{}, fmt.Errorf("service: course not found ")
 	}
 	courseResponse := response.CourseResponse{
-		ID:    Course.ID,
-		Name:  Course.Name,
-		Class: Course.Class,
+		ID:        Course.ID,
+		Title:     Course.Title,
+		StudentID: Course.StudentID,
 	}
 	return courseResponse, nil
 }
 
-func (u *CourseServiceImpl) Update(course request.UpdateCourseRequest) error {
-	courseData, err := u.CourseRepository.FindById(course.ID)
+func (u *CourseServiceImpl) Update(id int, course request.UpdateCourseRequest) error {
+	courseData, err := u.CourseRepository.FindById(id)
 	if err != nil {
 		return fmt.Errorf("service: can't update ")
 	}
-	courseData.Name = course.Name
-	u.CourseRepository.Update(courseData)
+
+	if course.Title != nil {
+		courseData.Title = *course.Title
+	}
+
+	if course.StudentID != nil {
+		courseData.StudentID = *course.StudentID
+	}
+	if err := u.CourseRepository.Update(id, courseData); err != nil {
+		return fmt.Errorf("update request failed: %w", err)
+	}
 	return nil
 }

@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"data/course/controller/request"
 	"data/course/model"
 	"data/helper"
 	"fmt"
@@ -34,9 +33,9 @@ func (u *CourseRepositoryImpl) Delete(courseId int) error {
 	return nil
 }
 
-func (u *CourseRepositoryImpl) FindAll() []model.Course {
+func (u *CourseRepositoryImpl) FindByStudentID(courseID int) []model.Course {
 	var Course []model.Course
-	result := u.Db.Find(&Course)
+	result := u.Db.Where("school_id=?", courseID).Find(&Course)
 	helper.ReturnError(result.Error)
 	return Course
 }
@@ -58,16 +57,12 @@ func (u *CourseRepositoryImpl) Save(course *model.Course) error {
 	return nil
 }
 
-func (u *CourseRepositoryImpl) Update(course model.Course) error {
-	var updateCourse = request.UpdateCourseRequest{
-		Name:     course.Name,
-		Class:    course.Class,
-		SchoolID: course.SchoolID,
-	}
+func (u *CourseRepositoryImpl) Update(id int, course model.Course) error {
 
-	result := u.Db.Model(&course).Updates(updateCourse)
+	result := u.Db.Model(model.Course{}).Where("id=?", course.ID).Updates(course)
 	if result.Error != nil {
 		return fmt.Errorf("can't update")
 	}
+
 	return nil
 }

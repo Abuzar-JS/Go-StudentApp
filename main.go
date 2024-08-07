@@ -2,6 +2,7 @@ package main
 
 import (
 	"data/config"
+	courseRouter "data/course/controller/router"
 	"data/helper"
 	schoolRouter "data/school/controller/router"
 	studentRouter "data/student/controller/router"
@@ -23,6 +24,7 @@ func main() {
 
 	schoolRouter.SchoolRouter(ginRouter, db, validate)
 	studentRouter.StudentRouter(ginRouter, db, validate)
+	courseRouter.CourseRouter(ginRouter, db, validate)
 
 	server := &http.Server{
 		Addr:    ":8080",

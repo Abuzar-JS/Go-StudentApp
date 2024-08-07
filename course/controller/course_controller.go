@@ -2,9 +2,7 @@ package controller
 
 import (
 	"data/course/controller/request"
-	"data/course/controller/response"
 	"data/course/service"
-	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -60,9 +58,14 @@ func (controller *CourseController) Update(ctx *gin.Context) {
 		})
 		return
 	}
-	updateCourseRequest.ID = id
+	if updateCourseRequest.Title == nil && updateCourseRequest.StudentID == nil {
+		ctx.JSON(400, gin.H{
+			"message": "atleast one field is required to update course",
+		})
+		return
+	}
 
-	err = controller.CourseService.Update(updateCourseRequest)
+	err = controller.CourseService.Update(id, updateCourseRequest)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"message": err.Error(),
@@ -125,14 +128,20 @@ func (controller *CourseController) FindById(ctx *gin.Context) {
 }
 
 // FindByAll Controller
-func (controller *CourseController) FindByAll(ctx *gin.Context) {
-	courseResponse := controller.CourseService.FindAll()
-	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   courseResponse,
+func (controller *CourseController) FindByStudentID(ctx *gin.Context) {
+	courseID := ctx.Param("student_id")
+	id, err := strconv.Atoi(courseID)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
 	}
-	ctx.Header("Content-Type", "application/json")
-	ctx.JSON(http.StatusOK, webResponse)
+	course := controller.CourseService.FindByStudentID(id)
+
+	ctx.JSON(200, gin.H{
+		"message": "course found",
+		"data":    course,
+	})
 
 }
