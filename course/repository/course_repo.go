@@ -7,5 +7,5 @@ type CourseRepository interface {
 	Update(id int, course model.Course) error
 	Delete(courseId int) error
 	FindById(courseId int) (Course model.Course, err error)
-	FindByStudentID(courseID int) []model.Course
+	FindByStudentID(courseID int) ([]model.Course, error)
 }

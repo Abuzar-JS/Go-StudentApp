@@ -2,7 +2,6 @@ package repository
 
 import (
 	"data/course/model"
-	"data/helper"
 	"fmt"
 
 	"gorm.io/gorm"
@@ -33,11 +32,16 @@ func (u *CourseRepositoryImpl) Delete(courseId int) error {
 	return nil
 }
 
-func (u *CourseRepositoryImpl) FindByStudentID(courseID int) []model.Course {
-	var Course []model.Course
-	result := u.Db.Where("school_id=?", courseID).Find(&Course)
-	helper.ReturnError(result.Error)
-	return Course
+func (u *CourseRepositoryImpl) FindByStudentID(studentID int) ([]model.Course, error) {
+	var course []model.Course
+	result := u.Db.Where("student_id=?", studentID).Find(&course)
+	fmt.Println("result", result)
+
+	if result.Error == nil {
+		return nil, fmt.Errorf("student not found")
+	}
+
+	return course, nil
 }
 
 func (u *CourseRepositoryImpl) FindById(courseId int) (Course model.Course, err error) {

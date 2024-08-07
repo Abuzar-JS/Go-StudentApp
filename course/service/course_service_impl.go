@@ -5,6 +5,8 @@ import (
 	"data/course/controller/response"
 	"data/course/model"
 	"data/course/repository"
+	schoolRepo "data/school/repository"
+
 	"fmt"
 
 	"github.com/go-playground/validator/v10"
@@ -12,11 +14,16 @@ import (
 
 type CourseServiceImpl struct {
 	CourseRepository repository.CourseRepository
+	SchoolRepository schoolRepo.SchoolRepository
 	validate         *validator.Validate
 }
 
-func NewCourseServiceImpl(courseRepository repository.CourseRepository, validate *validator.Validate) CourseService {
-	return &CourseServiceImpl{CourseRepository: courseRepository, validate: validate}
+func NewCourseServiceImpl(courseRepository repository.CourseRepository, validate *validator.Validate, schoolRepo schoolRepo.SchoolRepository) CourseService {
+	return &CourseServiceImpl{
+		CourseRepository: courseRepository,
+		validate:         validate,
+		SchoolRepository: schoolRepo,
+	}
 }
 
 func (u *CourseServiceImpl) Create(course request.CreateCourseRequest) (model.Course, error) {
@@ -50,9 +57,18 @@ func (u *CourseServiceImpl) Delete(courseId int) error {
 }
 
 // find all the Courses in DB
-func (u *CourseServiceImpl) FindByStudentID(studentID int) []response.CourseResponse {
+func (u *CourseServiceImpl) FindByStudentID(request GetCourseRequest) ([]response.CourseResponse, error) {
+	_, err := u.SchoolRepository.FindById(request.SchoolID)
+	if err != nil {
+		return nil, fmt.Errorf("service: school ID Not Found ")
+	}
 
-	result := u.CourseRepository.FindByStudentID(studentID)
+	result, err := u.CourseRepository.FindByStudentID(request.StudentID)
+
+	if err != nil {
+
+		return nil, fmt.Errorf("service: student ID not found")
+	}
 
 	var courses []response.CourseResponse
 
@@ -64,7 +80,7 @@ func (u *CourseServiceImpl) FindByStudentID(studentID int) []response.CourseResp
 		}
 		courses = append(courses, Course)
 	}
-	return courses
+	return courses, nil
 }
 
 func (u *CourseServiceImpl) FindById(courseId int) (response.CourseResponse, error) {

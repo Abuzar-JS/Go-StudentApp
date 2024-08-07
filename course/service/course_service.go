@@ -11,5 +11,5 @@ type CourseService interface {
 	Update(id int, course request.UpdateCourseRequest) error
 	Delete(courseId int) error
 	FindById(courseId int) (response.CourseResponse, error)
-	FindByStudentID(courseID int) []response.CourseResponse
+	FindByStudentID(request GetCourseRequest) ([]response.CourseResponse, error)
 }
