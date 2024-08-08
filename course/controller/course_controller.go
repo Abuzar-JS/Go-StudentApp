@@ -103,9 +103,8 @@ func (controller *CourseController) Delete(ctx *gin.Context) {
 
 // FindById Controller
 func (controller *CourseController) FindById(ctx *gin.Context) {
-
-	courseId := ctx.Param("course_id")
-	id, err := strconv.Atoi(courseId)
+	schoolIDParam := ctx.Param("school_id")
+	schoolID, err := strconv.Atoi(schoolIDParam)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"message": err.Error(),
@@ -113,7 +112,33 @@ func (controller *CourseController) FindById(ctx *gin.Context) {
 		return
 	}
 
-	course, err := controller.CourseService.FindById(id)
+	studentIDParam := ctx.Param("student_id")
+
+	studentID, err := strconv.Atoi(studentIDParam)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	courseIdParam := ctx.Param("course_id")
+
+	courseID, err := strconv.Atoi(courseIdParam)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
+
+	request := service.GetCourseRequest{
+		SchoolID:  schoolID,
+		StudentID: studentID,
+		CourseID:  courseID,
+	}
+
+	course, err := controller.CourseService.FindById(request)
 	if err != nil {
 		ctx.JSON(404, gin.H{
 			"message": err.Error(),
@@ -162,5 +187,4 @@ func (controller *CourseController) FindByStudentID(ctx *gin.Context) {
 		"message": "course found",
 		"data":    course,
 	})
-
 }

@@ -86,11 +86,24 @@ func (u *CourseServiceImpl) FindByStudentID(request GetCourseRequest) ([]respons
 		}
 		studentCourses = append(studentCourses, Course)
 	}
+
+	fmt.Println(studentCourses)
 	return studentCourses, nil
 }
 
-func (u *CourseServiceImpl) FindById(courseId int) (response.CourseResponse, error) {
-	Course, err := u.CourseRepository.FindById(courseId)
+func (u *CourseServiceImpl) FindById(request GetCourseRequest) (response.CourseResponse, error) {
+
+	_, err := u.SchoolRepository.FindById(request.SchoolID)
+	if err != nil {
+		return response.CourseResponse{}, fmt.Errorf("service: school ID Not Found ")
+	}
+
+	_, err = u.StudentRepository.FindById(request.StudentID)
+	if err != nil {
+		return response.CourseResponse{}, fmt.Errorf("service: student ID not Found")
+	}
+
+	Course, err := u.CourseRepository.FindById(request.CourseID)
 	if err != nil {
 		return response.CourseResponse{}, fmt.Errorf("service: course not found ")
 	}

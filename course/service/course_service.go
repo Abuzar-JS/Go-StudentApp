@@ -10,6 +10,6 @@ type CourseService interface {
 	Create(course request.CreateCourseRequest) (model.Course, error)
 	Update(id int, course request.UpdateCourseRequest) error
 	Delete(courseId int) error
-	FindById(courseId int) (response.CourseResponse, error)
+	FindById(request GetCourseRequest) (response.CourseResponse, error)
 	FindByStudentID(request GetCourseRequest) ([]response.CourseResponse, error)
 }

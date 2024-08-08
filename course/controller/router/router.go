@@ -22,7 +22,6 @@ func CourseRouter(router *gin.Engine, db *gorm.DB, validate *validator.Validate)
 	courseController := controller.NewCourseController(courseService)
 
 	courseRouter := router.Group("/api/v1/schools/:school_id/students/:student_id")
-	// courseRouter := router.Group("/api/v1/schools/students/")
 
 	courseRouter.GET("/courses", courseController.FindByStudentID)
 	courseRouter.GET("/courses/:course_id", courseController.FindById)
