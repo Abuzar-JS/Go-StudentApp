@@ -63,10 +63,9 @@ func (u *CourseServiceImpl) FindByStudentID(request GetCourseRequest) ([]respons
 		return nil, fmt.Errorf("service: school ID Not Found ")
 	}
 
-	result, err := u.CourseRepository.FindByStudentID(request.StudentID)
+	result, err := u.CourseRepository.FindById(request.StudentID)
 
 	if err != nil {
-
 		return nil, fmt.Errorf("service: student ID not found")
 	}
 

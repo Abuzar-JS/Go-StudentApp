@@ -35,10 +35,9 @@ func (u *CourseRepositoryImpl) Delete(courseId int) error {
 func (u *CourseRepositoryImpl) FindByStudentID(studentID int) ([]model.Course, error) {
 	var course []model.Course
 	result := u.Db.Where("student_id=?", studentID).Find(&course)
-	fmt.Println("result", result)
 
-	if result.Error == nil {
-		return nil, fmt.Errorf("student not found")
+	if result.Error != nil {
+		return nil, fmt.Errorf(" student not found")
 	}
 
 	return course, nil
