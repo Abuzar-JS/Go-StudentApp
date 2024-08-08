@@ -6,6 +6,7 @@ import (
 	"data/course/model"
 	"data/course/repository"
 	schoolRepo "data/school/repository"
+	studentRepo "data/student/repository"
 
 	"fmt"
 
@@ -13,16 +14,18 @@ import (
 )
 
 type CourseServiceImpl struct {
-	CourseRepository repository.CourseRepository
-	SchoolRepository schoolRepo.SchoolRepository
-	validate         *validator.Validate
+	CourseRepository  repository.CourseRepository
+	SchoolRepository  schoolRepo.SchoolRepository
+	StudentRepository studentRepo.StudentRepository
+	validate          *validator.Validate
 }
 
-func NewCourseServiceImpl(courseRepository repository.CourseRepository, validate *validator.Validate, schoolRepo schoolRepo.SchoolRepository) CourseService {
+func NewCourseServiceImpl(courseRepository repository.CourseRepository, validate *validator.Validate, schoolRepo schoolRepo.SchoolRepository, studentRepo studentRepo.StudentRepository) CourseService {
 	return &CourseServiceImpl{
-		CourseRepository: courseRepository,
-		validate:         validate,
-		SchoolRepository: schoolRepo,
+		CourseRepository:  courseRepository,
+		validate:          validate,
+		SchoolRepository:  schoolRepo,
+		StudentRepository: studentRepo,
 	}
 }
 
@@ -63,23 +66,27 @@ func (u *CourseServiceImpl) FindByStudentID(request GetCourseRequest) ([]respons
 		return nil, fmt.Errorf("service: school ID Not Found ")
 	}
 
-	result, err := u.CourseRepository.FindById(request.StudentID)
-
+	_, err = u.StudentRepository.FindById(request.StudentID)
 	if err != nil {
-		return nil, fmt.Errorf("service: student ID not found")
+		return nil, fmt.Errorf("service: student ID not Found")
 	}
 
-	var courses []response.CourseResponse
+	courses, err := u.CourseRepository.FindByStudentID(request.StudentID)
+	if err != nil {
+		return nil, fmt.Errorf("service: no course found against the student")
+	}
 
-	for _, value := range result {
+	var studentCourses []response.CourseResponse
+
+	for _, value := range courses {
 		Course := response.CourseResponse{
 			ID:        value.ID,
 			Title:     value.Title,
 			StudentID: value.StudentID,
 		}
-		courses = append(courses, Course)
+		studentCourses = append(studentCourses, Course)
 	}
-	return courses, nil
+	return studentCourses, nil
 }
 
 func (u *CourseServiceImpl) FindById(courseId int) (response.CourseResponse, error) {
