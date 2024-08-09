@@ -12,6 +12,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// Courses router
 func CourseRouter(router *gin.Engine, db *gorm.DB, validate *validator.Validate) *gin.Engine {
 	courseRepository := repository.NewCourseRepositoryImpl(db)
 	schoolRepository := schoolRepo.NewSchoolRepositoryImpl(db)
