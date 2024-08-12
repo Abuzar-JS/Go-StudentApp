@@ -1,6 +1,7 @@
 package router
 
 import (
+	schoolRepo "data/school/repository"
 	"data/student/controller"
 	"data/student/repository"
 	"data/student/service"
@@ -12,18 +13,19 @@ import (
 
 func StudentRouter(router *gin.Engine, db *gorm.DB, validate *validator.Validate) *gin.Engine {
 	studentRepository := repository.NewStudentRepositoryImpl(db)
+	schoolRepository := schoolRepo.NewSchoolRepositoryImpl(db)
 
-	studentService := service.NewStudentServiceImpl(studentRepository, validate)
+	studentService := service.NewStudentServiceImpl(studentRepository, validate, schoolRepository)
 
 	studentController := controller.NewStudentController(studentService)
 
-	studentRouter := router.Group("/api/v1")
+	studentRouter := router.Group("/api/v1/schools")
 
 	studentRouter.GET("/:school_id/students", studentController.FindBySchoolID)
-	studentRouter.GET("students/:student_id", studentController.FindById)
-	studentRouter.POST("/student", studentController.Create)
-	studentRouter.PUT("students/:student_id", studentController.Update)
-	studentRouter.DELETE("students/:student_id", studentController.Delete)
+	studentRouter.GET("/:school_id/students/:student_id", studentController.FindById)
+	studentRouter.POST("/:school_id/student", studentController.Create)
+	studentRouter.PUT("/:school_id/students/:student_id", studentController.Update)
+	studentRouter.DELETE("/:school_id/students/:student_id", studentController.Delete)
 
 	return router
 }

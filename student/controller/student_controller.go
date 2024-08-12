@@ -22,6 +22,14 @@ func NewStudentController(service service.StudentService) *StudentController {
 
 // Create Controller
 func (controller *StudentController) Create(ctx *gin.Context) {
+	schoolID := ctx.Param("school_id")
+	id, err := strconv.Atoi(schoolID)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
 	createStudentRequest := request.CreateStudentRequest{}
 	if err := ctx.ShouldBindJSON(&createStudentRequest); err != nil {
 		ctx.JSON(400, gin.H{
@@ -29,6 +37,8 @@ func (controller *StudentController) Create(ctx *gin.Context) {
 		})
 		return
 	}
+
+	createStudentRequest.SchoolID = id
 
 	student, err := controller.StudentService.Create(createStudentRequest)
 
@@ -58,6 +68,7 @@ func (controller *StudentController) Update(ctx *gin.Context) {
 		})
 		return
 	}
+
 	if updateStudentRequest.Class == nil && updateStudentRequest.Name == nil && updateStudentRequest.SchoolID == nil {
 		ctx.JSON(400, gin.H{
 			"message": "atleast single field is required to update student",
@@ -78,6 +89,7 @@ func (controller *StudentController) Update(ctx *gin.Context) {
 	})
 }
 
+// Delete Controller
 func (controller *StudentController) Delete(ctx *gin.Context) {
 	studentId := ctx.Param("student_id")
 	id, err := strconv.Atoi(studentId)
@@ -137,7 +149,13 @@ func (controller *StudentController) FindBySchoolID(ctx *gin.Context) {
 		})
 		return
 	}
-	student := controller.StudentService.FindBySchoolID(id)
+	student, err := controller.StudentService.FindBySchoolID(id)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
 
 	ctx.JSON(200, gin.H{
 		"message": "student found",

@@ -1,6 +1,7 @@
 package service
 
 import (
+	schoolRepo "data/school/repository"
 	"data/student/controller/request"
 	"data/student/controller/response"
 	"data/student/model"
@@ -13,10 +14,15 @@ import (
 type StudentServiceImpl struct {
 	StudentRepository repository.StudentRepository
 	validate          *validator.Validate
+	SchoolRepositorty schoolRepo.SchoolRepository
 }
 
-func NewStudentServiceImpl(studentRepository repository.StudentRepository, validate *validator.Validate) StudentService {
-	return &StudentServiceImpl{StudentRepository: studentRepository, validate: validate}
+func NewStudentServiceImpl(studentRepository repository.StudentRepository, validate *validator.Validate, schoolRepository schoolRepo.SchoolRepository) StudentService {
+	return &StudentServiceImpl{
+		StudentRepository: studentRepository,
+		validate:          validate,
+		SchoolRepositorty: schoolRepository,
+	}
 }
 
 func (u *StudentServiceImpl) Create(student request.CreateStudentRequest) (model.Student, error) {
@@ -51,9 +57,15 @@ func (u *StudentServiceImpl) Delete(studentId int) error {
 }
 
 // find all the Students in DB
-func (u *StudentServiceImpl) FindBySchoolID(studentID int) []response.StudentResponse {
+func (u *StudentServiceImpl) FindBySchoolID(schoolID int) ([]response.StudentResponse, error) {
 
-	result := u.StudentRepository.FindBySchoolID(studentID)
+	_, err := u.SchoolRepositorty.FindById(schoolID)
+
+	if err != nil {
+		return nil, fmt.Errorf("school id not found")
+	}
+
+	result := u.StudentRepository.FindBySchoolID(schoolID)
 
 	var students []response.StudentResponse
 
@@ -65,13 +77,13 @@ func (u *StudentServiceImpl) FindBySchoolID(studentID int) []response.StudentRes
 		}
 		students = append(students, Student)
 	}
-	return students
+	return students, nil
 }
 
 func (u *StudentServiceImpl) FindById(studentId int) (response.StudentResponse, error) {
 	Student, err := u.StudentRepository.FindById(studentId)
 	if err != nil {
-		return response.StudentResponse{}, fmt.Errorf("service: student not found ")
+		return response.StudentResponse{}, fmt.Errorf("student not found ")
 	}
 	studentResponse := response.StudentResponse{
 		ID:    Student.ID,

@@ -63,12 +63,12 @@ func (u *CourseServiceImpl) Delete(courseId int) error {
 func (u *CourseServiceImpl) FindByStudentID(request GetCourseRequest) ([]response.CourseResponse, error) {
 	_, err := u.SchoolRepository.FindById(request.SchoolID)
 	if err != nil {
-		return nil, fmt.Errorf("service: school ID Not Found ")
+		return nil, fmt.Errorf(" school ID Not Found ")
 	}
 
 	_, err = u.StudentRepository.FindById(request.StudentID)
 	if err != nil {
-		return nil, fmt.Errorf("service: student ID not Found")
+		return nil, fmt.Errorf("student ID not Found")
 	}
 
 	courses, err := u.CourseRepository.FindByStudentID(request.StudentID)
