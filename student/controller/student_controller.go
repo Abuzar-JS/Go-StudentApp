@@ -3,6 +3,7 @@ package controller
 import (
 	"data/student/controller/request"
 	"data/student/service"
+	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -117,6 +118,7 @@ func (controller *StudentController) Delete(ctx *gin.Context) {
 func (controller *StudentController) FindById(ctx *gin.Context) {
 
 	studentId := ctx.Param("student_id")
+	fmt.Println(studentId)
 	id, err := strconv.Atoi(studentId)
 	if err != nil {
 		ctx.JSON(400, gin.H{
