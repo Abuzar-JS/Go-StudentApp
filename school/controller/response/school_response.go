@@ -1,5 +1,6 @@
 package response
 
+// SchoolResponse
 type SchoolResponse struct {
 	Id   int    `json:"id"`
 	Name string `json:"name"`
