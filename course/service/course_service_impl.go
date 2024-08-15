@@ -91,6 +91,7 @@ func (u *CourseServiceImpl) FindByStudentID(request GetCourseRequest) ([]respons
 	return studentCourses, nil
 }
 
+// FindById
 func (u *CourseServiceImpl) FindById(request GetCourseRequest) (response.CourseResponse, error) {
 
 	_, err := u.SchoolRepository.FindById(request.SchoolID)
