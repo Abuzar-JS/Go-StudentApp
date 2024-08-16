@@ -77,6 +77,7 @@ func (u *SchoolServiceImpl) FindById(schoolId int) (response.SchoolResponse, err
 	return schoolResponse, nil
 }
 
+// Update School
 func (u *SchoolServiceImpl) Update(school request.UpdateSchoolRequest) error {
 	schoolData, err := u.SchoolRepository.FindById(school.Id)
 	if err != nil {
