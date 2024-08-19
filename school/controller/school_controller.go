@@ -15,6 +15,7 @@ type SchoolController struct {
 	SchoolService service.SchoolService
 }
 
+// School Controller
 func NewSchoolController(service service.SchoolService) *SchoolController {
 	return &SchoolController{
 		SchoolService: service,
