@@ -80,6 +80,7 @@ func (u *StudentServiceImpl) FindBySchoolID(schoolID int) ([]response.StudentRes
 	return students, nil
 }
 
+// Find Student by ID
 func (u *StudentServiceImpl) FindById(studentId int) (response.StudentResponse, error) {
 	Student, err := u.StudentRepository.FindById(studentId)
 	if err != nil {
