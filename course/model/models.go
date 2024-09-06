@@ -9,6 +9,7 @@ type Course struct {
 	Student   []model.Student `gorm:"-"`
 }
 
+// Return Table name
 func (c Course) TableName() string {
 	return "courses"
 }
