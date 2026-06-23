@@ -24,6 +24,7 @@ func StudentRouter(router *gin.Engine, db *gorm.DB, validate *validator.Validate
 	studentRouter.GET("/:school_id/students", studentController.FindBySchoolID)
 	studentRouter.GET("/:school_id/students/:student_id", studentController.FindById)
 	studentRouter.POST("/:school_id/student", studentController.Create)
+	studentRouter.POST("/:school_id/students", studentController.Create)
 	studentRouter.PUT("/:school_id/students/:student_id", studentController.Update)
 	studentRouter.DELETE("/:school_id/students/:student_id", studentController.Delete)
 
