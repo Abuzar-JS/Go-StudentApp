@@ -6,6 +6,7 @@ import (
 	"data/helper"
 	schoolRouter "data/school/controller/router"
 	studentRouter "data/student/controller/router"
+	teacherRouter "data/teacher/controller/router"
 
 	"net/http"
 
@@ -25,6 +26,7 @@ func main() {
 	schoolRouter.SchoolRouter(ginRouter, db, validate)
 	studentRouter.StudentRouter(ginRouter, db, validate)
 	courseRouter.CourseRouter(ginRouter, db, validate)
+	teacherRouter.TeacherRouter(ginRouter, db, validate)
 
 	server := &http.Server{
 		Addr:    ":8080",
