@@ -31,6 +31,11 @@ func (u *StudentServiceImpl) Create(student request.CreateStudentRequest) (model
 		return model.Student{}, err
 	}
 
+	_, err = u.SchoolRepositorty.FindById(student.SchoolID)
+	if err != nil {
+		return model.Student{}, fmt.Errorf("school id not found")
+	}
+
 	studentModel := model.Student{
 		Name:     student.Name,
 		Class:    student.Class,
@@ -43,7 +48,6 @@ func (u *StudentServiceImpl) Create(student request.CreateStudentRequest) (model
 	}
 
 	return studentModel, nil
-
 }
 
 func (u *StudentServiceImpl) Delete(studentId int) error {
