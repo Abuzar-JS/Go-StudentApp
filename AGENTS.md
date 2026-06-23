@@ -20,6 +20,9 @@ These are hard constraints for any future agent-assisted changes in this reposit
 - Change only what is required by the user request.
 - Keep commit deltas focused and minimal.
 - Avoid unrelated feature work and avoid changing file names unless requested.
+- **For each new task that requires repository changes, create a new dedicated branch before editing.**
+  - Use a task-specific name (e.g. `feat/<short-task>`, `fix/<short-task>`, `chore/<short-task>`).
+  - Keep current branch history cleanly scoped to that single task.
 
 ## Validation expectations
 - Run `go test ./...` with the local compatible toolchain before declaring completion.
